@@ -51,6 +51,7 @@ export async function fetchProducts({
       updatedAt: item.updated_at ?? item.updatedAt ?? item.modified_at,
       active: item.is_active == 0 ? false : true,
       variants,
+      image: item.image ?? null,
       addOns: item.add_on_link_count,
       __raw: item,
     };
@@ -151,7 +152,7 @@ export async function updateProduct(form) {
   }
 
   const dataBarang = {
-    id: Number(form.id), 
+    id: Number(form.id),
     nama_barang: form.name,
     kategori: Number(form.category),
     sku: form.sku,
@@ -159,15 +160,17 @@ export async function updateProduct(form) {
     harga: Number(form.price),
     unit: form.unit,
     deskripsi: form.description || null,
-    as_addon: false, 
-    has_addon:  false,
+    as_addon: false,
+    has_addon: form.addons?.length > 0,
     has_variant: false,
-    variant_remake: false, 
-    variant_clear: false, 
-    variant_change: false, 
-    add_on: form.addons 
-      .map((a, i) => ({
-        id_add_on_link: a.id,
+    variant_remake: false,
+    variant_clear: false,
+    variant_change: false,
+    add_on:
+      form.addons?.map((a, i) => ({
+        ...(a.status === "A"
+          ? { id_add_on_group: a.id }
+          : { id_add_on_link: a.id }),
         is_active: a.active ? 1 : 0,
         status: a.status,
         position: i + 1,

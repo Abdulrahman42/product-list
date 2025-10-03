@@ -1,10 +1,10 @@
-<script setup >
+<script setup>
 import { computed, ref, onMounted } from "vue";
 import { useProductStore } from "../stores/products";
 import { useDebounceFn } from "@vueuse/core";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import { NPagination, } from "naive-ui";
+import { NPagination } from "naive-ui";
 import ProductFilter from "../components/ProductFilter.vue";
 import ProductTable from "../components/ProductTable.vue";
 
@@ -40,6 +40,7 @@ const {
   setPageSize,
   setStatusFilter,
   toggleSelect,
+  toggleSelectAll,
 } = store;
 
 onMounted(() => load());
@@ -79,12 +80,10 @@ const showingRange = computed(() => {
   return `${start}-${end}`;
 });
 
-
 function selectTab(tabId) {
   activeTab.value = tabId;
   setStatusFilter(parseInt(tabId));
 }
-
 </script>
 
 <template>
@@ -128,6 +127,7 @@ function selectTab(tabId) {
               :selectedCount="selected"
               :isAllSelected="isAllSelected"
               @toggle-select="toggleSelect"
+              @toggle-select-all="toggleSelectAll"
               @toggle-active="onToggleActive"
               @go-detail="goToDetail" />
           </div>

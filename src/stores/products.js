@@ -67,6 +67,14 @@ export const useProductStore = defineStore("products", () => {
     else selected.value.add(id);
   }
 
+  function toggleSelectAll(checked) {
+    if (checked) {
+      selected.value = new Set(items.value.map((i) => i.id));
+    } else {
+      selected.value = new Set();
+    }
+  }
+
   function clearSelection() {
     selected.value = new Set();
   }
@@ -125,6 +133,7 @@ export const useProductStore = defineStore("products", () => {
     isAllSelected,
     load,
     toggleSelect,
+    toggleSelectAll,
     clearSelection,
     setPage,
     setPageSize,
